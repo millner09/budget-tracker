@@ -1,17 +1,30 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 )
 
+type config struct {
+	addr string
+	staticDir string
+}
+
 func main() {
+	var cfg config
+	
+
+	flag.StringVar(&cfg.addr, "addr", ":4000", "HTTP network address")
+
+	flag.StringVar(&cfg.staticDir, "static-dir", "./ui/static/", "Path to static assets")
+
 	mux := http.NewServeMux()
 
 	// Create a file server which serves files out of the "./ui/static" directory.
     // Note that the path given to the http.Dir function is relative to the project
     // directory root.
-    fileServer := http.FileServer(http.Dir("./ui/static/"))
+    fileServer := http.FileServer(http.Dir(cfg.staticDir))
 
     // Use the mux.Handle() function to register the file server as the handler for
     // all URL paths that start with "/static/". For matching paths, we strip the
@@ -24,7 +37,7 @@ func main() {
 	mux.HandleFunc("/createMonthlyBudget", createMonthlyBudget)
 	mux.HandleFunc("/viewMonthlyBudget", viewMonthlyBudget)
 
-	log.Println("Starting server on http://localhost:4000")
-	err := http.ListenAndServe(":4000", mux)
+	log.Printf("Starting server on http://localhost%s", cfg.addr)
+	err := http.ListenAndServe(cfg.addr, mux)
 	log.Fatal(err)
 }
