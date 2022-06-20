@@ -8,6 +8,7 @@ import (
 func main() {
 	mux := http.NewServeMux()
 
+	mux.HandleFunc("/", home)
 	mux.HandleFunc("/hello", hello)
 	mux.HandleFunc("/createMonthlyBudget", createMonthlyBudget)
 	mux.HandleFunc("/viewMonthlyBudget", viewMonthlyBudget)
