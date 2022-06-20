@@ -24,7 +24,7 @@ func main() {
 	mux.HandleFunc("/createMonthlyBudget", createMonthlyBudget)
 	mux.HandleFunc("/viewMonthlyBudget", viewMonthlyBudget)
 
-	log.Println("Starting server on :4000")
+	log.Println("Starting server on http://localhost:4000")
 	err := http.ListenAndServe(":4000", mux)
 	log.Fatal(err)
 }
