@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 )
@@ -37,14 +36,4 @@ func viewMonthlyBudget(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Display a specific budget with ID %d...", id)
 }
 
-func main() {
-	mux := http.NewServeMux()
 
-	mux.HandleFunc("/hello", hello)
-	mux.HandleFunc("/createMonthlyBudget", createMonthlyBudget)
-	mux.HandleFunc("/viewMonthlyBudget", viewMonthlyBudget)
-
-	log.Println("Starting server on :4000")
-	err := http.ListenAndServe(":4000", mux)
-	log.Fatal(err)
-}
