@@ -4,11 +4,18 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"os"
 )
 
 type config struct {
 	addr      string
 	staticDir string
+}
+
+type application struct {
+	errorLog *log.Logger
+	infoLog  *log.Logger
+	config   *config
 }
 
 func main() {
@@ -18,25 +25,22 @@ func main() {
 
 	flag.StringVar(&cfg.staticDir, "static-dir", "./ui/static/", "Path to static assets")
 
-	mux := http.NewServeMux()
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
-	// Create a file server which serves files out of the "./ui/static" directory.
-	// Note that the path given to the http.Dir function is relative to the project
-	// directory root.
-	fileServer := http.FileServer(http.Dir(cfg.staticDir))
+	app := &application{
+		errorLog: errorLog,
+		infoLog:  infoLog,
+		config:   &cfg,
+	}
 
-	// Use the mux.Handle() function to register the file server as the handler for
-	// all URL paths that start with "/static/". For matching paths, we strip the
-	// "/static" prefix before the request reaches the file server.
-	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
-
-	// Register the other application routes as normal.
-	mux.HandleFunc("/", home)
-	mux.HandleFunc("/hello", hello)
-	mux.HandleFunc("/createMonthlyBudget", createMonthlyBudget)
-	mux.HandleFunc("/viewMonthlyBudget", viewMonthlyBudget)
+	srv := &http.Server{
+		Addr:     cfg.addr,
+		ErrorLog: errorLog,
+		Handler:  app.routes(),
+	}
 
 	log.Printf("Starting server on http://localhost%s", cfg.addr)
-	err := http.ListenAndServe(cfg.addr, mux)
-	log.Fatal(err)
+	err := srv.ListenAndServe()
+	errorLog.Fatal(err)
 }
