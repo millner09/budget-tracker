@@ -65,3 +65,21 @@ func (app *application) viewMonthlyBudget(w http.ResponseWriter, r *http.Request
 
 	fmt.Fprintf(w, "Display a specific budget with ID %d...", id)
 }
+
+func (app *application) getEnabledCategories(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		w.Header().Set("Allow", http.MethodGet)
+		app.clientError(w, http.StatusMethodNotAllowed)
+		return
+	}
+
+	categories, err := app.categories.GetAllEnabled()
+
+	if err != nil {
+		app.serverError(w, err)
+	}
+
+	for _, category := range categories {
+		fmt.Fprintf(w, "%+v\n", category)
+	}
+}
