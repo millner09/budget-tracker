@@ -14,7 +14,7 @@ func (app *application) routes() *http.ServeMux {
 	mux.HandleFunc("/hello", app.hello)
 	mux.HandleFunc("/createMonthlyBudget", app.createMonthlyBudget)
 	mux.HandleFunc("/viewMonthlyBudget", app.viewMonthlyBudget)
-	mux.HandleFunc("/categories", app.getEnabledCategories)
+	mux.HandleFunc("/category/view", app.viewCategory)
 
 	return mux
 }

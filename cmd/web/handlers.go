@@ -1,10 +1,13 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"html/template"
 	"net/http"
 	"strconv"
+
+	"github.com/millner09/budget-tracker/internal/models"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
@@ -66,20 +69,44 @@ func (app *application) viewMonthlyBudget(w http.ResponseWriter, r *http.Request
 	fmt.Fprintf(w, "Display a specific budget with ID %d...", id)
 }
 
-func (app *application) getEnabledCategories(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		w.Header().Set("Allow", http.MethodGet)
-		app.clientError(w, http.StatusMethodNotAllowed)
+func (app *application) viewCategory(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+
+	if err != nil || id < 1 {
+		app.notFound(w)
 		return
 	}
 
-	categories, err := app.categories.GetAllEnabled()
+	category, err := app.categories.GetById(id)
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			app.notFound(w)
+		} else {
+			app.serverError(w, err)
+		}
+		return
+	}
 
+	files := []string{
+		"./ui/html/base.tmpl",
+		"./ui/html/partials/nav.tmpl",
+		"./ui/html/pages/viewCategory.tmpl",
+	}
+
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	// Create an instance of a templateData struct holding the snippet data.
+	data := &templateData{
+		Category: category,
+	}
+
+	err = ts.ExecuteTemplate(w, "base", data)
 	if err != nil {
 		app.serverError(w, err)
 	}
 
-	for _, category := range categories {
-		fmt.Fprintf(w, "%+v\n", category)
-	}
 }
