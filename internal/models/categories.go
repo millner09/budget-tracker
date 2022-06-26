@@ -48,7 +48,7 @@ func (m *CategoryModel) GetAllEnabled() ([]*Category, error) {
 }
 
 func (m *CategoryModel) GetById(id int) (*Category, error) {
-	stmt := "SELECT id, title, enabled, createdOn FROM categories WHERE enabled = true AND id= ?;"
+	stmt := "SELECT id, title, enabled, createdOn FROM categories WHERE id= ?;"
 
 	row := m.DB.QueryRow(stmt, id)
 
