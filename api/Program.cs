@@ -34,6 +34,7 @@ static void RegisterServices(WebApplicationBuilder builder)
     connStringBuilder.ConnectionString = builder.Configuration.GetConnectionString("PostgreSqlConnection");
     connStringBuilder.Username = builder.Configuration["UserID"];
     connStringBuilder.Password = builder.Configuration["Password"];
+    connStringBuilder.Host = builder.Configuration["PGSQLHostName"];
 
     builder.Services.AddDbContext<BudgetTrackerContext>(opt =>
     {
