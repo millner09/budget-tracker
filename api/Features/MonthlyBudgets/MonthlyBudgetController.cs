@@ -19,5 +19,19 @@ namespace api.Features.MonthlyBudgets
             var result = await mediator.Send(command);
             return HandleResult(result);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetMonthlyBudgetById(Guid id)
+        {
+            var result = await mediator.Send(new GetMonthlyBudgetById.Command(id));
+            return HandleResult(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMonthlyBudgets()
+        {
+            var result = await mediator.Send(new GetMonthlyBudgets.Command());
+            return HandleResult(result);
+        }
     }
 }

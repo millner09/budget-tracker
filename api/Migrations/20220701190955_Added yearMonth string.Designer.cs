@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using api.Data;
@@ -11,9 +12,10 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(BudgetTrackerContext))]
-    partial class BudgetTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20220701190955_Added yearMonth string")]
+    partial class AddedyearMonthstring
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
