@@ -21,6 +21,7 @@ namespace api.Features.MonthlyBudgets
         {
             public Guid Id { get; set; }
             public decimal StartingBalance { get; set; }
+            public string YearMonth { get; set; }
         }
 
         public class MappingProfile : Profile
@@ -45,7 +46,7 @@ namespace api.Features.MonthlyBudgets
 
             public async Task<Result<CreateMonthlyBudgetResponse>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var monthlyBudget = mapper.Map<MonthlyBudget>(request);
+                var monthlyBudget = new MonthlyBudget(request.StartingBalance, DateTime.Now.Date.ToUniversalTime());
                 context.MonthlyBudgets.Add(monthlyBudget);
 
                 var result = await context.SaveChangesAsync() > 0;

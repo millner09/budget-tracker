@@ -7,10 +7,19 @@ namespace api.Models
 {
     public class MonthlyBudget
     {
+        public MonthlyBudget() { }
+        public MonthlyBudget(decimal startingBalance, DateTime startDate)
+        {
+            StartingBalance = startingBalance;
+            MonthlyBudgetDate = startDate;
+            YearMonth = startDate.ToString("yyyy-MM");
+        }
         public Guid Id { get; set; }
+        public string YearMonth { get; }
         public decimal StartingBalance { get; set; }
         public List<PlannedExpense> PlannedExpenses { get; set; }
         public List<PlannedIncome> PlannedIncomes { get; set; }
+        public DateTime MonthlyBudgetDate { get; set; }
     }
 
     public class PlannedExpense
