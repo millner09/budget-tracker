@@ -1,7 +1,7 @@
 using api.Features.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using static api.Features.Categories.CreateCategory;
+using api.Features.Categories;
 
 namespace api.Features.Categories
 {
@@ -16,7 +16,7 @@ namespace api.Features.Categories
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Command createCommand)
+        public async Task<IActionResult> Create(CreateCategory.Command createCommand)
         {
             var result = await mediator.Send(createCommand);
             return HandleResult(result);
@@ -43,5 +43,11 @@ namespace api.Features.Categories
             return HandleResult(result);
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, UpdateCategory.UpdateCategoryRequest request)
+        {
+            var result = await mediator.Send(new UpdateCategory.Command(id, request));
+            return HandleResult(result);
+        }
     }
 }
