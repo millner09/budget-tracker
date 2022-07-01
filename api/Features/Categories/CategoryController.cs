@@ -28,5 +28,20 @@ namespace api.Features.Categories
             var result = await mediator.Send(new GetAllCategories.Command());
             return HandleResult(result);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAll(Guid id)
+        {
+            var result = await mediator.Send(new GetCategoryById.Command(id));
+            return HandleResult(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await mediator.Send(new DeleteCategory.Command(id));
+            return HandleResult(result);
+        }
+
     }
 }
