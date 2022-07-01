@@ -33,5 +33,12 @@ namespace api.Features.MonthlyBudgets
             var result = await mediator.Send(new GetMonthlyBudgets.Command());
             return HandleResult(result);
         }
+
+        [HttpPost("{budgetId}/test/{transactionId}")]
+        public async Task<IActionResult> Test(Guid budgetId, Guid transactionId, CreateMonthlyBudget.Command command)
+        {
+            var res = $"Hello, world \n{budgetId}\n{transactionId}\n{command.StartingBalance}";
+            return Ok(res);
+        }
     }
 }

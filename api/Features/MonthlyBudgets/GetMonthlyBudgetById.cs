@@ -35,7 +35,6 @@ namespace api.Features.MonthlyBudgets
         public class ExpenseResponse
         {
             public Guid Id { get; set; }
-            public string CategoryName { get; set; }
             public Guid CategoryId { get; set; }
             public decimal PlannedAmount { get; set; }
         }
@@ -43,7 +42,6 @@ namespace api.Features.MonthlyBudgets
         public class IncomeResponse
         {
             public Guid Id { get; set; }
-            public string CategoryName { get; set; }
             public Guid CategoryId { get; set; }
             public decimal PlannedAmount { get; set; }
         }
@@ -56,12 +54,7 @@ namespace api.Features.MonthlyBudgets
                     .ForMember(dest => dest.Incomes, opt => opt.MapFrom(src => src.PlannedIncomes))
                     .ForMember(dest => dest.Expenses, opt => opt.MapFrom(src => src.PlannedExpenses));
                 CreateMap<PlannedExpense, ExpenseResponse>();
-                CreateMap<Category, IncomeResponse>()
-                    .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Id))
-                    .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Name));
-                CreateMap<Category, ExpenseResponse>()
-                    .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Id))
-                    .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Name));
+                CreateMap<PlannedIncome, IncomeResponse>();
             }
         }
 
@@ -79,9 +72,7 @@ namespace api.Features.MonthlyBudgets
             {
                 var monthlyBudget = await context.MonthlyBudgets
                     .Include(x => x.PlannedExpenses)
-                    .ThenInclude(x => x.Category)
                     .Include(x => x.PlannedIncomes)
-                    .ThenInclude(x => x.Category)
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
 
                 if (monthlyBudget == null)

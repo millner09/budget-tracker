@@ -28,6 +28,7 @@ namespace api.Models
         public MonthlyBudget MonthlyBudget { get; set; }
         public Guid MonthlyBudgetId { get; set; }
         public Category Category { get; set; }
+        public Guid CategoryId { get; set; }
         public decimal PlannedAmount { get; set; }
     }
 
@@ -37,6 +38,7 @@ namespace api.Models
         public MonthlyBudget MonthlyBudget { get; set; }
         public Guid MonthlyBudgetId { get; set; }
         public Category Category { get; set; }
+        public Guid CategoryId { get; set; }
         public decimal PlannedAmount { get; set; }
     }
 }
