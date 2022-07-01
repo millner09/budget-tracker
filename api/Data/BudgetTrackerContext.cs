@@ -14,5 +14,8 @@ namespace api.Data
         }
 
         public DbSet<Category> Categories { get; set; }
+        public DbSet<PlannedExpense> PlannedExpenses { get; set; }
+        public DbSet<PlannedIncome> PlannedIncomes { get; set; }
+        public DbSet<MonthlyBudget> MonthlyBudgets { get; set; }
     }
 }

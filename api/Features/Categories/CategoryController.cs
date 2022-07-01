@@ -1,7 +1,6 @@
 using api.Features.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using api.Features.Categories;
 
 namespace api.Features.Categories
 {

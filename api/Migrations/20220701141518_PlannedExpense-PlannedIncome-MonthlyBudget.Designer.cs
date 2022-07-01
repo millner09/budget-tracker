@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using api.Data;
@@ -11,9 +12,10 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(BudgetTrackerContext))]
-    partial class BudgetTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20220701141518_PlannedExpense-PlannedIncome-MonthlyBudget")]
+    partial class PlannedExpensePlannedIncomeMonthlyBudget
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,7 +62,7 @@ namespace api.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("MonthlyBudgetId")
+                    b.Property<Guid?>("MonthlyBudgetId")
                         .HasColumnType("uuid");
 
                     b.Property<decimal>("PlannedAmount")
@@ -84,7 +86,7 @@ namespace api.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("MonthlyBudgetId")
+                    b.Property<Guid?>("MonthlyBudgetId")
                         .HasColumnType("uuid");
 
                     b.Property<decimal>("PlannedAmount")
@@ -107,15 +109,11 @@ namespace api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("api.Models.MonthlyBudget", "MonthlyBudget")
+                    b.HasOne("api.Models.MonthlyBudget", null)
                         .WithMany("PlannedExpenses")
-                        .HasForeignKey("MonthlyBudgetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MonthlyBudgetId");
 
                     b.Navigation("Category");
-
-                    b.Navigation("MonthlyBudget");
                 });
 
             modelBuilder.Entity("api.Models.PlannedIncome", b =>
@@ -126,15 +124,11 @@ namespace api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("api.Models.MonthlyBudget", "MonthlyBudget")
+                    b.HasOne("api.Models.MonthlyBudget", null)
                         .WithMany("PlannedIncomes")
-                        .HasForeignKey("MonthlyBudgetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MonthlyBudgetId");
 
                     b.Navigation("Category");
-
-                    b.Navigation("MonthlyBudget");
                 });
 
             modelBuilder.Entity("api.Models.MonthlyBudget", b =>
