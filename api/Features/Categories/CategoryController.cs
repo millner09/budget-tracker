@@ -1,16 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using api.Features.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using static api.Features.Categories.CreateCategory;
 
 namespace api.Features.Categories
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class CategoryController : ControllerBase
+
+    public class CategoryController : BaseApiController
     {
         private readonly IMediator mediator;
 
@@ -23,7 +19,14 @@ namespace api.Features.Categories
         public async Task<IActionResult> Create(Command createCommand)
         {
             var result = await mediator.Send(createCommand);
-            return Ok(result);
+            return HandleResult(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await mediator.Send(new GetAllCategories.Command());
+            return HandleResult(result);
         }
     }
 }

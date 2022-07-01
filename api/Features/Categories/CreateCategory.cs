@@ -1,14 +1,14 @@
 using api.Data;
+using api.Features.Core;
 using api.Models;
 using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace api.Features.Categories
 {
     public class CreateCategory
     {
-        public class Command : IRequest<Category>
+        public class Command : IRequest<Result<Category>>
         {
             public string Name { get; set; }
         }
@@ -18,7 +18,7 @@ namespace api.Features.Categories
             public MappingProfile() => CreateMap<Command, Category>();
         }
 
-        public class Handler : IRequestHandler<Command, Category>
+        public class Handler : IRequestHandler<Command, Result<Category>>
         {
             private readonly IMapper mapper;
             private readonly BudgetTrackerContext context;
@@ -29,13 +29,16 @@ namespace api.Features.Categories
                 this.mapper = mapper;
             }
 
-            public async Task<Category> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Category>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var category = mapper.Map<Category>(request);
                 context.Categories.Add(category);
 
-                await context.SaveChangesAsync();
-                return category;
+                var result = await context.SaveChangesAsync() > 0;
+
+                if (!result)
+                    return Result<Category>.Failure("Failed to create category");
+                return Result<Category>.Success(category);
             }
         }
     }
