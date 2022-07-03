@@ -40,5 +40,13 @@ namespace api.Features.MonthlyBudgets
             var res = $"Hello, world \n{budgetId}\n{transactionId}\n{command.StartingBalance}";
             return Ok(res);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var res = await mediator.Send(new DeleteMonthlyBudget.Command(id));
+
+            return HandleResult(res);
+        }
     }
 }
