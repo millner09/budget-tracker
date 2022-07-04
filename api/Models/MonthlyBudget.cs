@@ -14,12 +14,19 @@ namespace api.Models
             MonthlyBudgetDate = startDate;
             YearMonth = startDate.ToString("yyyy-MM");
         }
+
         public Guid Id { get; set; }
         public string YearMonth { get; private set; }
         public decimal StartingBalance { get; set; }
         public List<PlannedExpense> PlannedExpenses { get; set; }
         public List<PlannedIncome> PlannedIncomes { get; set; }
-        public DateTime MonthlyBudgetDate { get; set; }
+        public DateTime MonthlyBudgetDate { get; private set; }
+
+        public void SetMonthlyBudgetDate(DateTime date)
+        {
+            YearMonth = date.ToString("yyyy-MM");
+            MonthlyBudgetDate = date;
+        }
     }
 
     public class PlannedExpense

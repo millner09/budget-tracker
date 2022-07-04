@@ -48,5 +48,12 @@ namespace api.Features.MonthlyBudgets
 
             return HandleResult(res);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, UpdateMonthlyBudget.UpdateMonthlyBudgetRequest request)
+        {
+            var result = await mediator.Send(new UpdateMonthlyBudget.Command(id, request));
+            return HandleResult(result);
+        }
     }
 }

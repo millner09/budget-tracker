@@ -22,6 +22,8 @@ namespace api.Features.MonthlyBudgets
             public Guid Id { get; set; }
             public decimal StartingBalance { get; set; }
             public string YearMonth { get; set; }
+            public DateTime MonthlyBudgetDate { get; private set; }
+
         }
 
         public class MappingProfile : Profile
