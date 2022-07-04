@@ -29,8 +29,8 @@ namespace api.Features.MonthlyBudgets
             public decimal StartingBalance { get; set; }
             public string YearMonth { get; set; }
             public DateTime MonthlyBudgetDate { get; private set; }
-            public List<ExpenseResponse> Expenses { get; set; }
-            public List<IncomeResponse> Incomes { get; set; }
+            public List<ExpenseResponse> PlannedExpenses { get; set; }
+            public List<IncomeResponse>  PlannedIncomes { get; set; }
         }
 
         public class ExpenseResponse
@@ -52,8 +52,8 @@ namespace api.Features.MonthlyBudgets
             public MappingProfile()
             {
                 CreateMap<MonthlyBudget, GetMonthlyBudgetByIdResponse>()
-                    .ForMember(dest => dest.Incomes, opt => opt.MapFrom(src => src.PlannedIncomes))
-                    .ForMember(dest => dest.Expenses, opt => opt.MapFrom(src => src.PlannedExpenses));
+                    .ForMember(dest => dest.PlannedIncomes, opt => opt.MapFrom(src => src.PlannedIncomes))
+                    .ForMember(dest => dest.PlannedExpenses, opt => opt.MapFrom(src => src.PlannedExpenses));
                 CreateMap<PlannedExpense, ExpenseResponse>();
                 CreateMap<PlannedIncome, IncomeResponse>();
             }
