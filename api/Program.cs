@@ -1,10 +1,12 @@
 using api.Data;
 using api.Features.Categories;
+using api.Services;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using System.Text;
@@ -22,17 +24,30 @@ static void RegisterServices(WebApplicationBuilder builder)
     var services = builder.Services;
     // Add services to the container.
 
-    services.AddIdentity<IdentityUser, IdentityRole>(opt => opt.SignIn.RequireConfirmedAccount = false)
-        .AddEntityFrameworkStores<BudgetTrackerContext>();
-    services.AddAuthentication()
-        .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
+    services.AddIdentityCore<IdentityUser>(opt =>
+    {
+        opt.SignIn.RequireConfirmedAccount = false;
+        opt.Password.RequireNonAlphanumeric = false;
+    })
+    .AddEntityFrameworkStores<BudgetTrackerContext>()
+    .AddSignInManager<SignInManager<IdentityUser>>();
+
+    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"]));
+
+    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(opt =>
+    {
+        opt.TokenValidationParameters = new TokenValidationParameters
         {
-            opts.TokenValidationParameters.ValidateAudience = false;
-            opts.TokenValidationParameters.ValidateIssuer = false;
-            opts.TokenValidationParameters.IssuerSigningKey
-            = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            builder.Configuration["BearerTokens:Key"]));
-        });
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = key,
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
+
+    services.AddScoped<TokenService>();
+
 
     services.AddControllers()
     .AddFluentValidation(config =>

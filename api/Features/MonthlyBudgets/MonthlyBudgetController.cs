@@ -37,7 +37,7 @@ namespace api.Features.MonthlyBudgets
         }
 
         [HttpPost("{budgetId}/test/{transactionId}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         public async Task<IActionResult> Test(Guid budgetId, Guid transactionId, CreateMonthlyBudget.Command command)
         {
             var res = $"Hello, world \n{budgetId}\n{transactionId}\n{command.StartingBalance}";
