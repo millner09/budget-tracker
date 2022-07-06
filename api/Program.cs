@@ -2,8 +2,12 @@ using api.Data;
 using api.Features.Categories;
 using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Npgsql;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 RegisterServices(builder);
@@ -17,6 +21,18 @@ static void RegisterServices(WebApplicationBuilder builder)
 {
     var services = builder.Services;
     // Add services to the container.
+
+    services.AddIdentity<IdentityUser, IdentityRole>(opt => opt.SignIn.RequireConfirmedAccount = false)
+        .AddEntityFrameworkStores<BudgetTrackerContext>();
+    services.AddAuthentication()
+        .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
+        {
+            opts.TokenValidationParameters.ValidateAudience = false;
+            opts.TokenValidationParameters.ValidateIssuer = false;
+            opts.TokenValidationParameters.IssuerSigningKey
+            = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+            builder.Configuration["BearerTokens:Key"]));
+        });
 
     services.AddControllers()
     .AddFluentValidation(config =>
@@ -52,7 +68,7 @@ static void ConfigureApplication(WebApplication app)
     }
 
     app.UseHttpsRedirection();
-
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();

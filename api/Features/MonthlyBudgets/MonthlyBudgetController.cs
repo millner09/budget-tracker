@@ -1,5 +1,7 @@
 using api.Features.Core;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Features.MonthlyBudgets
@@ -35,6 +37,7 @@ namespace api.Features.MonthlyBudgets
         }
 
         [HttpPost("{budgetId}/test/{transactionId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Test(Guid budgetId, Guid transactionId, CreateMonthlyBudget.Command command)
         {
             var res = $"Hello, world \n{budgetId}\n{transactionId}\n{command.StartingBalance}";
