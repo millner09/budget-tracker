@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
+
     public class BaseApiController : ControllerBase
     {
+        [NonAction]
         protected ActionResult HandleResult<T>(Result<T> result)
         {
             if (result == null) return NotFound();

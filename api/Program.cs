@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using System.Text;
 using application.Categories;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 RegisterServices(builder);
@@ -56,7 +57,10 @@ static void RegisterServices(WebApplicationBuilder builder)
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     services.AddEndpointsApiExplorer();
-    services.AddSwaggerGen();
+    services.AddSwaggerGen(c =>
+    {
+        c.SwaggerDoc(name: "v1", new OpenApiInfo { Title = "Api Budget Tracker", Version = "v1" });
+    });
     services.AddMediatR(typeof(CreateCategory.Handler).Assembly);
     services.AddAutoMapper(typeof(CreateCategory.MappingProfile).Assembly);
 
@@ -77,13 +81,14 @@ static void ConfigureApplication(WebApplication app)
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
-        app.UseSwagger();
-        app.UseSwaggerUI(options =>
-        {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-            options.RoutePrefix = string.Empty;
-        });
+
     }
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("swagger/v1/swagger.json", "API V1");
+        c.RoutePrefix = "swagger";
+    });
 
     app.UseHttpsRedirection();
     app.UseAuthentication();

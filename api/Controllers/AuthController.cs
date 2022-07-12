@@ -78,6 +78,7 @@ namespace api.Controllers
             return CreateUserObject(user);
         }
 
+        [NonAction]
         private UserDto CreateUserObject(IdentityUser user)
         {
             return new UserDto
