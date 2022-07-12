@@ -1,15 +1,14 @@
-using api.Data;
-using api.Features.Categories;
+using persistance;
 using api.Services;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using System.Text;
+using application.Categories;
 
 var builder = WebApplication.CreateBuilder(args);
 RegisterServices(builder);
