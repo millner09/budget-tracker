@@ -57,10 +57,7 @@ static void RegisterServices(WebApplicationBuilder builder)
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     services.AddEndpointsApiExplorer();
-    services.AddSwaggerGen(c =>
-    {
-        c.SwaggerDoc(name: "v1", new OpenApiInfo { Title = "Api Budget Tracker", Version = "v1" });
-    });
+    services.AddSwaggerGen();
     services.AddMediatR(typeof(CreateCategory.Handler).Assembly);
     services.AddAutoMapper(typeof(CreateCategory.MappingProfile).Assembly);
 
@@ -84,11 +81,7 @@ static void ConfigureApplication(WebApplication app)
 
     }
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("swagger/v1/swagger.json", "API V1");
-        c.RoutePrefix = "swagger";
-    });
+    app.UseSwaggerUI();
 
     app.UseHttpsRedirection();
     app.UseAuthentication();
