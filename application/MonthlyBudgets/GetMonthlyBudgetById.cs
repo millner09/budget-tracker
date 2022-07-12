@@ -14,9 +14,9 @@ namespace application.MonthlyBudgets
 {
     public class GetMonthlyBudgetById
     {
-        public class Command : IRequest<Result<GetMonthlyBudgetByIdResponse>>
+        public class GetMonthlyBudgetCommand : IRequest<Result<GetMonthlyBudgetByIdResponse>>
         {
-            public Command(Guid id)
+            public GetMonthlyBudgetCommand(Guid id)
             {
                 Id = id;
             }
@@ -59,7 +59,7 @@ namespace application.MonthlyBudgets
             }
         }
 
-        public class Handler : IRequestHandler<Command, Result<GetMonthlyBudgetByIdResponse>>
+        public class Handler : IRequestHandler<GetMonthlyBudgetCommand, Result<GetMonthlyBudgetByIdResponse>>
         {
             private readonly IMapper mapper;
             private readonly BudgetTrackerContext context;
@@ -69,7 +69,7 @@ namespace application.MonthlyBudgets
                 this.mapper = mapper;
                 this.context = context;
             }
-            public async Task<Result<GetMonthlyBudgetByIdResponse>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<GetMonthlyBudgetByIdResponse>> Handle(GetMonthlyBudgetCommand request, CancellationToken cancellationToken)
             {
                 var monthlyBudget = await context.MonthlyBudgets
                     .Include(x => x.PlannedExpenses)

@@ -10,14 +10,14 @@ namespace application.MonthlyBudgets
 {
     public class DeleteMonthlyBudget
     {
-        public class Command : IRequest<Result<Unit>>
+        public class DeleteMonthlyBudgetCommand : IRequest<Result<Unit>>
         {
-            public Command(Guid id) => Id = id;
+            public DeleteMonthlyBudgetCommand(Guid id) => Id = id;
 
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+        public class Handler : IRequestHandler<DeleteMonthlyBudgetCommand, Result<Unit>>
         {
             private readonly BudgetTrackerContext context;
             public Handler(BudgetTrackerContext context)
@@ -26,7 +26,7 @@ namespace application.MonthlyBudgets
 
             }
 
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(DeleteMonthlyBudgetCommand request, CancellationToken cancellationToken)
             {
                 var monthlyBudget = await context.MonthlyBudgets.FindAsync(request.Id);
 

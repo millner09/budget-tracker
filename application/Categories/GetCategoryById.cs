@@ -18,9 +18,9 @@ namespace application.Categories
             public string Name { get; set; }
         }
 
-        public class Command : IRequest<Result<GetCategoryByIdResult>>
+        public class GetCategoryByIdCommand : IRequest<Result<GetCategoryByIdResult>>
         {
-            public Command(Guid id) => Id = id;
+            public GetCategoryByIdCommand(Guid id) => Id = id;
             public Guid Id { get; set; }
         }
 
@@ -29,7 +29,7 @@ namespace application.Categories
             public MappingProfile() => CreateMap<Category, GetCategoryByIdResult>();
         }
 
-        public class Handler : IRequestHandler<Command, Result<GetCategoryByIdResult>>
+        public class Handler : IRequestHandler<GetCategoryByIdCommand, Result<GetCategoryByIdResult>>
         {
             private readonly IMapper mapper;
             private readonly BudgetTrackerContext context;
@@ -40,7 +40,7 @@ namespace application.Categories
                 this.context = context;
             }
 
-            public async Task<Result<GetCategoryByIdResult>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<GetCategoryByIdResult>> Handle(GetCategoryByIdCommand request, CancellationToken cancellationToken)
             {
                 var category = await context.Categories.FindAsync(request.Id);
 

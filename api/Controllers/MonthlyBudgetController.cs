@@ -16,7 +16,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateMonthlyBudget(CreateMonthlyBudget.Command command)
+        public async Task<IActionResult> CreateMonthlyBudget(CreateMonthlyBudget.CreateMonthlyBudgetCommand command)
         {
             var result = await mediator.Send(command);
             return HandleResult(result);
@@ -25,20 +25,20 @@ namespace api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMonthlyBudgetById(Guid id)
         {
-            var result = await mediator.Send(new GetMonthlyBudgetById.Command(id));
+            var result = await mediator.Send(new GetMonthlyBudgetById.GetMonthlyBudgetCommand(id));
             return HandleResult(result);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMonthlyBudgets()
         {
-            var result = await mediator.Send(new GetMonthlyBudgets.Command());
+            var result = await mediator.Send(new GetMonthlyBudgets.GetMonthlyBudgetsCommand());
             return HandleResult(result);
         }
 
         [HttpPost("{budgetId}/test/{transactionId}")]
         [Authorize]
-        public async Task<IActionResult> Test(Guid budgetId, Guid transactionId, CreateMonthlyBudget.Command command)
+        public async Task<IActionResult> Test(Guid budgetId, Guid transactionId, CreateMonthlyBudget.CreateMonthlyBudgetCommand command)
         {
             var res = $"Hello, world \n{budgetId}\n{transactionId}\n{command.StartingBalance}";
             return Ok(res);
@@ -47,7 +47,7 @@ namespace api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var res = await mediator.Send(new DeleteMonthlyBudget.Command(id));
+            var res = await mediator.Send(new DeleteMonthlyBudget.DeleteMonthlyBudgetCommand(id));
 
             return HandleResult(res);
         }

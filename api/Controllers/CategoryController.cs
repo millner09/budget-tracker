@@ -15,7 +15,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCategory.Command createCommand)
+        public async Task<IActionResult> Create(CreateCategory.CreateCategoryCommand createCommand)
         {
             var result = await mediator.Send(createCommand);
             return HandleResult(result);
@@ -24,21 +24,21 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result = await mediator.Send(new GetAllCategories.Command());
+            var result = await mediator.Send(new GetAllCategories.GetAllCategoriesCommand());
             return HandleResult(result);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAll(Guid id)
         {
-            var result = await mediator.Send(new GetCategoryById.Command(id));
+            var result = await mediator.Send(new GetCategoryById.GetCategoryByIdCommand(id));
             return HandleResult(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await mediator.Send(new DeleteCategory.Command(id));
+            var result = await mediator.Send(new DeleteCategory.DeleteCategoryCommand(id));
             return HandleResult(result);
         }
 

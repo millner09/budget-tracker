@@ -12,7 +12,7 @@ namespace application.MonthlyBudgets
 {
     public class CreateMonthlyBudget
     {
-        public class Command : IRequest<Result<CreateMonthlyBudgetResponse>>
+        public class CreateMonthlyBudgetCommand : IRequest<Result<CreateMonthlyBudgetResponse>>
         {
             public decimal StartingBalance { get; set; }
         }
@@ -31,11 +31,11 @@ namespace application.MonthlyBudgets
             public MappingProfile()
             {
                 CreateMap<MonthlyBudget, CreateMonthlyBudgetResponse>();
-                CreateMap<Command, MonthlyBudget>();
+                CreateMap<CreateMonthlyBudgetCommand, MonthlyBudget>();
             }
         }
 
-        public class Handler : IRequestHandler<Command, Result<CreateMonthlyBudgetResponse>>
+        public class Handler : IRequestHandler<CreateMonthlyBudgetCommand, Result<CreateMonthlyBudgetResponse>>
         {
             private readonly IMapper mapper;
             private readonly BudgetTrackerContext context;
@@ -46,7 +46,7 @@ namespace application.MonthlyBudgets
                 this.mapper = mapper;
             }
 
-            public async Task<Result<CreateMonthlyBudgetResponse>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<CreateMonthlyBudgetResponse>> Handle(CreateMonthlyBudgetCommand request, CancellationToken cancellationToken)
             {
                 var monthlyBudget = new MonthlyBudget(request.StartingBalance, DateTime.Now.Date.ToUniversalTime());
                 context.MonthlyBudgets.Add(monthlyBudget);

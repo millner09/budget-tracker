@@ -6,13 +6,13 @@ namespace application.Categories
 {
     public class DeleteCategory
     {
-        public class Command : IRequest<Result<Unit>>
+        public class DeleteCategoryCommand : IRequest<Result<Unit>>
         {
             public Guid Id { get; set; }
-            public Command(Guid id) => Id = id;
+            public DeleteCategoryCommand(Guid id) => Id = id;
         }
 
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+        public class Handler : IRequestHandler<DeleteCategoryCommand, Result<Unit>>
         {
             private readonly BudgetTrackerContext context;
 
@@ -21,7 +21,7 @@ namespace application.Categories
                 this.context = context;
 
             }
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
             {
                 var category = await context.Categories.FindAsync(request.Id);
 

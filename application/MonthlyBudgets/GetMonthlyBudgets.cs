@@ -23,7 +23,7 @@ namespace application.MonthlyBudgets
 
         
 
-        public class Command : IRequest<Result<IEnumerable<GetMonthlyBudgetResponse>>> { }
+        public class GetMonthlyBudgetsCommand : IRequest<Result<IEnumerable<GetMonthlyBudgetResponse>>> { }
 
         public class MapperProfile : Profile
         {
@@ -33,7 +33,7 @@ namespace application.MonthlyBudgets
             }
         }
 
-        public class Handler : IRequestHandler<Command, Result<IEnumerable<GetMonthlyBudgetResponse>>>
+        public class Handler : IRequestHandler<GetMonthlyBudgetsCommand, Result<IEnumerable<GetMonthlyBudgetResponse>>>
         {
             private readonly IMapper mapper;
             private readonly BudgetTrackerContext context;
@@ -44,7 +44,7 @@ namespace application.MonthlyBudgets
                 this.context = context;
             }
 
-            public async Task<Result<IEnumerable<GetMonthlyBudgetResponse>>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<IEnumerable<GetMonthlyBudgetResponse>>> Handle(GetMonthlyBudgetsCommand request, CancellationToken cancellationToken)
             {
                 var monthlyBudgets = await context.MonthlyBudgets.ToListAsync();
                 var response = mapper.Map<IEnumerable<GetMonthlyBudgetResponse>>(monthlyBudgets);

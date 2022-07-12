@@ -13,7 +13,7 @@ namespace application.Categories
 {
     public class GetAllCategories
     {
-        public class Command : IRequest<Result<IEnumerable<GetAllCategoriesResponse>>> { }
+        public class GetAllCategoriesCommand : IRequest<Result<IEnumerable<GetAllCategoriesResponse>>> { }
 
         public class GetAllCategoriesResponse
         {
@@ -26,7 +26,7 @@ namespace application.Categories
             public MappingProfile() => CreateMap<Category, GetAllCategoriesResponse>();
         }
 
-        public class Handler : IRequestHandler<Command, Result<IEnumerable<GetAllCategoriesResponse>>>
+        public class Handler : IRequestHandler<GetAllCategoriesCommand, Result<IEnumerable<GetAllCategoriesResponse>>>
         {
             private readonly IMapper mapper;
             private readonly BudgetTrackerContext context;
@@ -36,7 +36,7 @@ namespace application.Categories
                 this.mapper = mapper;
 
             }
-            public async Task<Result<IEnumerable<GetAllCategoriesResponse>>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<IEnumerable<GetAllCategoriesResponse>>> Handle(GetAllCategoriesCommand request, CancellationToken cancellationToken)
             {
                 var result = mapper.Map<IEnumerable<GetAllCategoriesResponse>>(await context.Categories.ToListAsync());
 
