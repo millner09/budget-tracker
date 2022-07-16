@@ -1,10 +1,9 @@
 using domain;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace persistance
 {
-    public class BudgetTrackerContext : IdentityDbContext
+    public class BudgetTrackerContext : DbContext
     {
         public BudgetTrackerContext(DbContextOptions options) : base(options)
         {

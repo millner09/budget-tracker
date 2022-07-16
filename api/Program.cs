@@ -24,14 +24,6 @@ static void RegisterServices(WebApplicationBuilder builder)
     var services = builder.Services;
     // Add services to the container.
 
-    services.AddIdentityCore<IdentityUser>(opt =>
-    {
-        opt.SignIn.RequireConfirmedAccount = false;
-        opt.Password.RequireNonAlphanumeric = false;
-    })
-    .AddEntityFrameworkStores<BudgetTrackerContext>()
-    .AddSignInManager<SignInManager<IdentityUser>>();
-
     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"]));
 
     services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
