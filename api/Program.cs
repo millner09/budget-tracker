@@ -24,6 +24,11 @@ static void RegisterServices(WebApplicationBuilder builder)
     var services = builder.Services;
     // Add services to the container.
 
+    services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+    {
+        builder.WithOrigins("https://localhost:7247");
+    }));
+
     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"]));
 
     services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -70,7 +75,7 @@ static void ConfigureApplication(WebApplication app)
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
-
+        app.UseCors("MyPolicy");
     }
     app.UseSwagger();
     app.UseSwaggerUI();

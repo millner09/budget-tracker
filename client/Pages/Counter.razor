@@ -1,0 +1,40 @@
+﻿@page "/counter"
+@inject ICategoryService CategoryService
+@using client.Services;
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@if (categories == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    @foreach (var category in categories)
+    {
+        <p>@category.Id @category.Name</p>
+    }
+}
+
+@code {
+    private int currentCount = 0;
+
+    private IReadOnlyList<Category>? categories;
+
+    protected override async Task OnInitializedAsync()
+    {
+        categories = await CategoryService.GetCategories();
+    }
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}
